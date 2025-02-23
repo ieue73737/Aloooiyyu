@@ -1,0 +1,29 @@
+name: Wallet Hunter
+
+on:
+  push:
+  schedule:
+    - cron: '0 */6 * * *'  # يشتغل كل 6 ساعات
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install web3 aiohttp bit
+      - name: Run Wallet Hunter
+        run: |
+          python wallet_hunter.py
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: results
+          path: |
+            wallet_results.log
+            found_wallets.txt
